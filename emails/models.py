@@ -24,7 +24,7 @@ class Email(models.Model):
         return f"Email to {self.recipients}"
 
     def send(self):
-        try:
+        #try:
             django_send_email(
                 subject=self.subject,
                 message=self.message,
@@ -36,5 +36,5 @@ class Email(models.Model):
             self.sent_on = now()
             self.save()
             return True
-        except SMTPException:
-            return False
+        #except SMTPException as e:
+            #return False

@@ -16,14 +16,14 @@ import environ
 import django_heroku
 import os
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 env = environ.Env(
     DEBUG=(bool, False),
     SECRET_KEY=(str, 'django-insecure-ajhf328rfehw97fhf98')
 )
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
@@ -143,3 +143,6 @@ EMAIL_CONFIG = env.email_url('EMAIL_URL')
 vars().update(EMAIL_CONFIG)
 
 django_heroku.settings(locals())
+
+if DEBUG:
+    del DATABASES['default']['OPTIONS']['sslmode']
