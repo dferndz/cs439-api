@@ -6,8 +6,8 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=store_db
-      - POSTGRES_USER=store_api
+      - POSTGRES_DB=cs439_db
+      - POSTGRES_USER=cs439_admin
       - POSTGRES_PASSWORD=supersecretpassword
     ports:
       - '5431:5432'
