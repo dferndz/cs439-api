@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from rest_framework.exceptions import NotFound, NotAuthenticated, APIException, AuthenticationFailed
-from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.validators import UniqueValidator
 from django.core.exceptions import ObjectDoesNotExist
 
