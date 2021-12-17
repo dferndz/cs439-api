@@ -5,6 +5,12 @@ from .exceptions import InvalidCodeException, DuplicateRegradeException
 from users.models import User
 
 
+class ProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ["id", "name", "description", "info_site_name", "active"]
+
+
 class RegradeSerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
     csid = serializers.SlugRelatedField(many=False, slug_field="csid", allow_null=False, queryset=User.objects.all(), write_only=True)
