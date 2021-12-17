@@ -47,18 +47,23 @@ INSTALLED_APPS = [
     "projects.apps.ProjectsConfig",
     "users.apps.UsersConfig",
     "rest_framework.authtoken",
+    "corsheaders",
     "rest_framework",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# TODO: this is not good. Make a white list
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = "store_api.urls"
 
