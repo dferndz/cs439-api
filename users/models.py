@@ -33,7 +33,7 @@ class User(AbstractUser):
         self.code = key
         self.save()
         # TODO: create email template to send to user
-        self.send_email("New code", f"Your code is {self.code}")
+        self.send_email("CS439 Personal Code", f"Hi {self.first_name}!\n\nYour personal code is {self.code}.")
 
     def send_email(self, subject, message):
         Email.objects.create(subject=subject, message=message, recipients=[self.email])

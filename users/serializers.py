@@ -27,14 +27,14 @@ class RequestCodeSerializer(serializers.Serializer):
     def save(self, **kwargs):
         csid = self.validated_data.get("csid")
         eid = self.validated_data.get("eid")
-
         user = User.objects.get(eid=eid)
-        user.generate_code()
 
-        if user.csid is None:
+        if user.csid is None or user.email is None:
             user.csid = csid
             user.email = f"{csid}@cs.utexas.edu"
             user.save()
+
+        user.generate_code()
 
 
 class UserSerializer(serializers.Serializer):
