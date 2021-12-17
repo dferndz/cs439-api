@@ -13,7 +13,7 @@ from .managers import CustomUserManager, PasswordTokenManager
 class User(AbstractUser):
     username = None
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
-    email = models.EmailField(_("email address"), unique=True)
+    email = models.EmailField(_("email address"), unique=True, null=True, default=None)
     csid = models.CharField(unique=True, blank=True, null=True, default=None, max_length=512)
     eid = models.CharField(unique=True, blank=False, null=False, max_length=512)
     code = models.CharField(max_length=6, blank=True, null=True, default=None)

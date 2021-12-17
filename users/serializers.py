@@ -34,6 +34,7 @@ class RequestCodeSerializer(serializers.Serializer):
 
         if user.csid is None:
             user.csid = csid
+            user.email = f"{csid}@cs.utexas.edu"
             user.save()
 
 
