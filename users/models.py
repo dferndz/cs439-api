@@ -1,3 +1,5 @@
+import random
+import string
 from uuid import uuid4
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -12,6 +14,9 @@ class User(AbstractUser):
     username = None
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     email = models.EmailField(_("email address"), unique=True)
+    csid = models.CharField(unique=True, blank=False, null=False, max_length=512)
+    eid = models.CharField(unique=True, blank=True, null=True, default=None, max_length=512)
+    code = models.CharField(max_length=6, blank=True, null=True, default=None)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -19,7 +24,16 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.get_full_name()
+
+    def generate_code(self):
+        key = "".join(random.choice(string.digits) for _ in range(6))
+        while User.objects.filter(code=key).exists():
+            key = "".join(random.choice(string.digits) for _ in range(6))
+        self.code = key
+        self.save()
+        # TODO: create email template to send to user
+        self.send_email("New code", f"Your code is {self.code}")
 
     def send_email(self, subject, message):
         Email.objects.create(subject=subject, message=message, recipients=[self.email])
@@ -32,11 +46,11 @@ class User(AbstractUser):
         token = self.get_password_token()
 
         send_email(
-            subject="Welcome to Recipes!",
+            subject="Welcome to CS 439!",
             template="accounts/emails/action_email.html",
             recipients=[self.email],
             context={
-                "title": "Welcome to recipes",
+                "title": "Welcome to CS 439",
                 "message": "To activate your account and create a password use the button below.",
                 "button": {
                     "url": f"http://localhost:8000/api/users/{self.pk}/change-password/{token.token}/",

@@ -4,7 +4,28 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.validators import UniqueValidator
 
 from .models import User, PasswordToken
-from .exceptions import PasswordDoNotMatchException
+from .exceptions import PasswordDoNotMatchException, InvalidEidException
+
+
+class RequestCodeSerializer(serializers.Serializer):
+    csid = serializers.SlugRelatedField(slug_field="csid", queryset=User.objects.all())
+    eid = serializers.CharField()
+
+    def validate(self, attrs):
+        user = attrs.get("csid")
+        eid = attrs.get("eid")
+
+        if user.eid is not None and user.eid != eid:
+            raise InvalidEidException()
+
+        return attrs
+
+    def save(self, **kwargs):
+        user = self.validated_data.get("csid")
+        user.generate_code()
+        if user.eid is None:
+            user.eid = self.validated_data.get("eid")
+            user.save()
 
 
 class UserSerializer(serializers.Serializer):

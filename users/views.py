@@ -7,12 +7,19 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from .permissions import IsAdminOrIsMe, IsAnonymousOrAdmin
-from .serializers import UserSerializer, AuthLoginSerializer, ResetPasswordSerializer, ChangePasswordSerializer
+from .serializers import UserSerializer, AuthLoginSerializer, ResetPasswordSerializer, ChangePasswordSerializer, RequestCodeSerializer
 from .models import User
 
 
 class AuthViewSet(viewsets.ViewSet):
     serializer_class = AuthLoginSerializer
+
+    @action(detail=False, url_path="request-code", methods=["post"])
+    def request_code(self, request):
+        serializer = RequestCodeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data={"status": "success"})
 
     @action(detail=False, url_path='login', methods=['post'])
     def login(self, request):
