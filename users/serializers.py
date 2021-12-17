@@ -2,29 +2,38 @@ from rest_framework import serializers
 from rest_framework.exceptions import NotFound, NotAuthenticated, APIException, AuthenticationFailed
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.validators import UniqueValidator
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import User, PasswordToken
-from .exceptions import PasswordDoNotMatchException, InvalidEidException
+from .exceptions import PasswordDoNotMatchException, InvalidEidException, NotRegisteredException
 
 
 class RequestCodeSerializer(serializers.Serializer):
-    csid = serializers.SlugRelatedField(slug_field="csid", queryset=User.objects.all())
+    csid = serializers.CharField()
     eid = serializers.CharField()
 
     def validate(self, attrs):
-        user = attrs.get("csid")
+        csid = attrs.get("csid")
         eid = attrs.get("eid")
+        try:
+            user = User.objects.get(eid=eid)
+        except ObjectDoesNotExist:
+            raise NotRegisteredException()
 
-        if user.eid is not None and user.eid != eid:
+        if user.csid is not None and user.csid != csid:
             raise InvalidEidException()
 
         return attrs
 
     def save(self, **kwargs):
-        user = self.validated_data.get("csid")
+        csid = self.validated_data.get("csid")
+        eid = self.validated_data.get("eid")
+
+        user = User.objects.get(eid=eid)
         user.generate_code()
-        if user.eid is None:
-            user.eid = self.validated_data.get("eid")
+
+        if user.csid is None:
+            user.csid = csid
             user.save()
 
 

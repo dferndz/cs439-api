@@ -11,3 +11,9 @@ class InvalidEidException(APIException):
     status_code = 400
     default_code = "invalid_eid"
     default_detail = "invalid_eid"
+
+
+class NotRegisteredException(APIException):
+    status_code = 400
+    default_code = "not_registered"
+    default_detail = "not_registered"
