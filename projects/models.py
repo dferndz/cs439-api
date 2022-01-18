@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from users.models import User
 from .choices import RegradeStatus
+from emails.utils import send_email
 
 
 class Project(models.Model):
@@ -32,3 +33,13 @@ class RegradeRequest(models.Model):
 
     def __str__(self):
         return f"{self.user.get_full_name()} - {self.project.name}"
+
+    def notify_user(self):
+        message = f"Hi {self.user.first_name},\n\nWe have received a regrade request for:\n\n"
+        regrade_info = f"Project: {self.project.name}\nCommit: {self.commit}\n\n"
+        footer = f"You will receive an update when we process your regrade.\n"
+
+        self.user.send_email(
+            subject=f"Regrade request for project {self.project.name}",
+            message=message+regrade_info+footer
+        )
