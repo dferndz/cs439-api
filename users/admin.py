@@ -10,8 +10,8 @@ from .forms import RegisterStudentForm
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    list_display = ('email', 'is_staff', 'is_active',)
-    list_filter = ('email', 'is_staff', 'is_active',)
+    list_display = ('first_name', 'last_name', 'email', 'is_staff', 'is_active',)
+    list_filter = ('is_staff', 'is_active',)
     fieldsets = (
         (None, {'fields': ('first_name', 'last_name', 'email', 'csid', 'eid', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
@@ -22,7 +22,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active')}
         ),
     )
-    search_fields = ('email',)
+    search_fields = ('email', 'first_name', 'last_name', 'eid', 'csid')
     ordering = ('email',)
 
     def get_urls(self):
