@@ -5,10 +5,10 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.contrib import messages
 
-from emails.models import Email
-
-
-@admin.register(Email)
+# from emails.models import Email
+#
+# For security reasons this functionality is disabled
+# @admin.register(Email)
 class EmailAdmin(admin.ModelAdmin):
     list_display = ['recipients', 'sent', 'sent_on', 'send_button']
     list_filter = ['sent', 'sent_on']
