@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "emails.apps.EmailsConfig",
     "projects.apps.ProjectsConfig",
     "users.apps.UsersConfig",
+    "resources.apps.ResourcesConfig",
     "rest_framework.authtoken",
     "corsheaders",
     "rest_framework",

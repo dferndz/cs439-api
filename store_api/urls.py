@@ -19,12 +19,14 @@ from rest_framework.routers import DefaultRouter
 
 from users.views import UserViewSet, AuthViewSet
 from projects.views import RegradeViewSet, ProjectViewSet
+from resources.views import ResourceViewSet
 
 router = DefaultRouter()
 router.register(r"users", UserViewSet, basename="users")
 router.register(r'auth', AuthViewSet, basename='auth')
 router.register(r'regrades', RegradeViewSet, basename='regrades')
 router.register(r'projects', ProjectViewSet, basename='projects')
+router.register(r'resources', ResourceViewSet, basename='resources')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
